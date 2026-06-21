@@ -36,6 +36,7 @@ module cpu (
       regs <= '{default: '0};
     end else begin
       pc   <= pc + 1'b1;
+
       case (inst.r.op)
         LOAD: regs[inst.a.rid] <= dmem_rdata;
         MOVE: regs[inst.r.dst] <= reg_1;
@@ -47,4 +48,5 @@ module cpu (
       endcase
     end
   end
+
 endmodule

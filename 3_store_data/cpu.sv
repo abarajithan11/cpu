@@ -16,7 +16,6 @@ module cpu (
   instruction_t inst;
   logic [7:0] pc;
   logic [15:0] regs [0:15];
-  logic [15:0] reg_1; // --- new
 
   always_comb begin
     imem_addr  = pc;

@@ -16,10 +16,10 @@ module cpu (
   logic [15:0] regs [0:15]; // --- new
 
   always_comb begin
-    imem_addr = pc;
-    inst      = instruction_t'(imem_rdata);
+    imem_addr  = pc;
+    inst       = instruction_t'(imem_rdata);
 
-    dmem_addr = inst.a.addr; // --- new
+    dmem_addr  = inst.a.addr; // --- new
   end
 
   always_ff @(posedge clk) begin
