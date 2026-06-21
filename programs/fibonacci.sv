@@ -10,7 +10,7 @@ module fibonacci;
 
   cpu dut(.*);
 
-  memory imem(clk, imem_addr, '0,         1'b0,    imem_rdata);
+  memory imem(clk, imem_addr,         '0,     1'b0, imem_rdata);
   memory dmem(clk, dmem_addr, dmem_wdata, dmem_wen, dmem_rdata);
 
   initial forever #5 clk = ~clk;
