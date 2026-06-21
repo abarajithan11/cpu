@@ -1,9 +1,9 @@
 # Building a Simple 16-Bit CPU Incrementally in <50 lines of SystemVerilog
 
 This project builds a small 16-bit CPU in five incremental stages. 
-Each stage has
-its own CPU, self-checking testbench, and Makefile.
+Each stage has its own CPU, self-checking testbench, and Makefile.
 Programs are written directly in SV testbench.
+[Full CPU is here](5_jump/cpu.sv)
 
 ## Setup
 

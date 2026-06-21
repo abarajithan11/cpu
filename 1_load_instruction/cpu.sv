@@ -10,7 +10,7 @@ module cpu (
   logic [7:0] pc;
 
   always_comb begin
-    imem_addr               = pc;
+    imem_addr = pc;
   end
 
   always_ff @(posedge clk) begin

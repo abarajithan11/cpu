@@ -12,14 +12,13 @@ module cpu (
 );
   logic [7:0] pc;
   typedef enum logic [3:0] {LOAD} op_t; // --- new
-  logic [3:0] op, src_1, src_2, dst, rid; // --- new
+  logic [3:0] op, rid; // --- new
   logic [7:0] addr; // --- new
   logic [15:0] regs [0:15]; // --- new
 
   always_comb begin
-    imem_addr               = pc;
-    {src_2, src_1, dst, op} = imem_rdata; // --- new
-    {addr        , rid, op} = imem_rdata; // --- new
+    imem_addr       = pc;
+    {addr, rid, op} = imem_rdata; // --- new
 
     dmem_addr = addr; // --- new
   end

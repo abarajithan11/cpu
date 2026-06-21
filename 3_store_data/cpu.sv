@@ -20,8 +20,8 @@ module cpu (
 
   always_comb begin
     imem_addr               = pc;
-    {src_2, src_1, dst, op} = imem_rdata;
     {addr        , rid, op} = imem_rdata;
+    {src_2, src_1, dst, op} = imem_rdata; // --- new
 
     dmem_addr  = addr;
     dmem_wdata = regs[rid]; // --- new
