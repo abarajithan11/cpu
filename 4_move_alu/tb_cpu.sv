@@ -1,8 +1,7 @@
 `timescale 1ns/1ps
 
 module tb_cpu;
-
-    localparam logic [3:0] LOAD=1, ADD=4, SUB=5, MUL=6;
+    import cpu_types::*;
 
     logic clk = 0, reset = 1;
     logic [7:0] imem_addr, dmem_addr;
@@ -20,20 +19,22 @@ module tb_cpu;
         $dumpfile("wave.vcd");
         $dumpvars(0, tb_cpu);
 
-        // Load 7 and 3, then calculate their sum, difference, and product.
-        imem.mem[0] = {LOAD, 4'h1, 4'h0, 4'h1};
-        imem.mem[1] = {LOAD, 4'h1, 4'h1, 4'h2};
-        imem.mem[2] = {ADD,  4'h1, 4'h2, 4'h3};
-        imem.mem[3] = {SUB,  4'h1, 4'h2, 4'h4};
-        imem.mem[4] = {MUL,  4'h1, 4'h2, 4'h5};
-
         dmem.mem['h10] = 16'd7;
         dmem.mem['h11] = 16'd3;
 
+        // Load 7 and 3, copy r1, then calculate sum, difference, and product.
+        imem.mem[0] = {8'h10,        4'h1, LOAD}; // r1 = mem[0x10] = 7
+        imem.mem[1] = {8'h11,        4'h2, LOAD}; // r2 = mem[0x11] = 3
+        imem.mem[2] = {4'h0,  4'h1,  4'h6, MOVE}; // r6 = r1
+        imem.mem[3] = {4'h2,  4'h1,  4'h3, ADD};  // r3 = r1 + r2
+        imem.mem[4] = {4'h2,  4'h1,  4'h4, SUB};  // r4 = r1 - r2
+        imem.mem[5] = {4'h2,  4'h1,  4'h5, MUL};  // r5 = r1 * r2
+
         @(posedge clk); #1ps reset = 0;
-        repeat (5) @(posedge clk);
+        repeat (6) @(posedge clk);
         #1ps;
 
+        if (dut.regs[6] != 7)  $fatal(1, "MOVE failed");
         if (dut.regs[3] != 10) $fatal(1, "ADD failed");
         if (dut.regs[4] != 4)  $fatal(1, "SUB failed");
         if (dut.regs[5] != 21) $fatal(1, "MUL failed");

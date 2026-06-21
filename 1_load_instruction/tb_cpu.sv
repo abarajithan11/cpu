@@ -1,8 +1,7 @@
 `timescale 1ns/1ps
 
 module tb_cpu;
-
-    localparam logic [3:0] MOVE=0, LOAD=1, STORE=2;
+    import cpu_types::*;
 
     logic clk = 0, reset = 1;
     logic [7:0] imem_addr;
@@ -19,9 +18,9 @@ module tb_cpu;
         $dumpvars(0, tb_cpu);
 
         // Read and display three example instructions.
-        imem.mem[0] = {LOAD,  4'h2, 4'hA, 4'h3};
-        imem.mem[1] = {MOVE,  4'h3, 4'h0, 4'h4};
-        imem.mem[2] = {STORE, 4'h4, 4'h4, 4'h0};
+        imem.mem[0] = {8'h2A,        4'h3, LOAD};  // r3 = mem[0x2A]
+        imem.mem[1] = {4'h0,  4'h3,  4'h4, MOVE};  // r4 = r3
+        imem.mem[2] = {8'h40,        4'h4, STORE}; // mem[0x40] = r4
 
         @(posedge clk); #1ps reset = 0;
         repeat (3) @(posedge clk);

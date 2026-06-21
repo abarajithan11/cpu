@@ -13,5 +13,5 @@ module memory (
         if (we) mem[addr] <= wdata;
 
     always_comb rdata = mem[addr];
-    
+
 endmodule

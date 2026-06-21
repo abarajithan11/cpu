@@ -1,6 +1,6 @@
 # Building a Simple 16-Bit CPU
 
-This project builds a small 16-bit CPU in six incremental stages. Each stage has
+This project builds a small 16-bit CPU in five incremental stages. Each stage has
 its own CPU, self-checking testbench, and Makefile.
 
 Enter the development environment with:
@@ -14,31 +14,31 @@ nix-shell
 | `1_load_instruction` | Program counter and instruction fetch |
 | `2_load_data_into_registers` | Sixteen registers and `LOAD` |
 | `3_store_data` | `STORE` |
-| `4_move_data_between_registers` | `MOVE` |
-| `5_alu` | `ADD`, `SUB`, and `MUL` |
-| `6_jump` | Register-indirect conditional `JNZ` |
+| `4_move_alu` | `MOVE`, `ADD`, `SUB`, and `MUL` |
+| `5_jump` | Immediate-address conditional `JNZ` |
 
-Every instruction is 16 bits:
+* Check [`common/cpu_types.sv`](common/cpu_types.sv) for instruction format & opcode values.
+* Every instruction is 16 bits and is represented by a packed union of two packed structures:
 
-```text
-15          12 11           8 7            4 3            0
-+--------------+---------------+--------------+--------------+
-|      op      |     src_1     |    src_2     |     dst      |
-+--------------+---------------+--------------+--------------+
-```
+| Instructions | Structure | Bits 15:12 | Bits 11:8 | Bits 7:4 | Bits 3:0 |
+| --- | --- | --- | --- | --- | --- |
+| `LOAD`, `STORE`, `JNZ` | `atype` | `addr[7:4]` | `addr[3:0]` | `reg_idx` | `op` |
+| `MOVE`, `ADD`, `SUB`, `MUL` | `rtype` | `src_2` | `src_1` | `dst` | `op` |
 
-The opcode values are `MOVE=0`, `LOAD=1`, `STORE=2`, `JNZ=3`, `ADD=4`,
-`SUB=5`, and `MUL=6`.
+`JNZ` jumps to the `addr` when `regs[reg_idx]` is nonzero.
+
+* The opcode values are `LOAD=0`, `STORE=1`, `MOVE=2`, `ADD=3`, `SUB=4`, `MUL=5`, and `JNZ=6`.
 
 Run any stage with:
 
 ```bash
-cd 6_jump
+cd 5_jump
 make sim
 ```
 
-The simulation is self-checking and writes `wave.vcd`. Open that waveform with:
+Run a complete program from the project root with:
 
 ```bash
+make sim PROGRAM=factorial
 make gtkwave
 ```

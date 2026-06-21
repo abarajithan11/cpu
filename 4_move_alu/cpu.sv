@@ -12,22 +12,21 @@ module cpu (
     output logic        dmem_we,
     input  logic [15:0] dmem_rdata
 );
-
-    typedef enum logic [3:0] {MOVE, LOAD, STORE, JNZ, ADD, SUB, MUL} op_t;
-    typedef struct packed {op_t op; logic [3:0] src_1, src_2, dst;} instruction_t;
+    import cpu_types::*;
 
     logic [7:0] pc;
     logic [15:0] regs [0:15];
-    logic [15:0] reg_1;
+    logic [15:0] reg_1, reg_2; // New!
     instruction_t inst;
 
     always_comb begin
         imem_addr  = pc;
         inst       = instruction_t'(imem_rdata);
-        reg_1      = regs[inst.src_1];
-        dmem_addr  = inst.op == STORE ? {inst.src_2, inst.dst} : {inst.src_1, inst.src_2};
-        dmem_wdata = reg_1;
-        dmem_we    = !reset && inst.op == STORE;
+        reg_1      = regs[inst.rtype.src_1];
+        reg_2      = regs[inst.rtype.src_2]; // New!
+        dmem_addr  = inst.atype.addr;
+        dmem_wdata = regs[inst.atype.reg_idx];
+        dmem_we    = !reset && inst.atype.op == STORE;
     end
 
     always_ff @(posedge clk) begin
@@ -36,11 +35,14 @@ module cpu (
             for (int i = 0; i < 16; i++) regs[i] <= '0;
         end else begin
             pc <= pc + 1'b1;
-            case (inst.op) // New!
-                MOVE: regs[inst.dst] <= reg_1; // New!
-                LOAD: regs[inst.dst] <= dmem_rdata;
-                default: ; // New!
-            endcase // New!
+            case (inst.rtype.op)
+                MOVE: regs[inst.rtype.dst] <= reg_1;
+                LOAD: regs[inst.atype.reg_idx] <= dmem_rdata;
+                ADD:  regs[inst.rtype.dst] <= reg_1 + reg_2; // New!
+                SUB:  regs[inst.rtype.dst] <= reg_1 - reg_2; // New!
+                MUL:  regs[inst.rtype.dst] <= reg_1 * reg_2; // New!
+                default: ;
+            endcase
         end
     end
 

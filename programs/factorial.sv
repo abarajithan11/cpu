@@ -1,0 +1,48 @@
+`timescale 1ns/1ps
+
+module factorial;
+    import cpu_types::*;
+
+    logic clk = 0, reset = 1;
+    logic [7:0] imem_addr, dmem_addr;
+    logic [15:0] imem_rdata, dmem_rdata, dmem_wdata;
+    logic dmem_we;
+
+    cpu dut(.*);
+
+    memory imem(clk, imem_addr, '0,         1'b0,    imem_rdata);
+    memory dmem(clk, dmem_addr, dmem_wdata, dmem_we, dmem_rdata);
+
+    initial forever #5 clk = ~clk;
+
+    initial begin
+        $dumpfile("wave.vcd");
+        $dumpvars(0, factorial);
+
+        dmem.mem[0] = 16'd5;
+        dmem.mem[1] = 16'd1;
+
+        // Load 5 and constant 1, then initialize the factorial accumulator.
+        imem.mem[0] = {8'h00,        4'h1, LOAD}; // r1 (counter)   = 5
+        imem.mem[1] = {8'h01,        4'h2, LOAD}; // r2 (one)       = 1
+        imem.mem[2] = {4'h0,  4'h2,  4'h3, MOVE}; // r3 (factorial) = r2 (one)
+
+        // Multiply by the counter, decrement it, and repeat until zero.
+        imem.mem[3] = {4'h1,  4'h3,  4'h3, MUL}; // r3 (factorial)            *= r1 (counter)
+        imem.mem[4] = {4'h2,  4'h1,  4'h1, SUB}; // r1 (counter)              -= r2 (one)
+        imem.mem[5] = {8'h03,        4'h1, JNZ}; // repeat while r1 (counter) != 0
+
+        // Store 5! at memory address 0x10.
+        imem.mem[6] = {8'h10,        4'h3, STORE}; // mem[0x10] = r3 (factorial)
+
+        @(posedge clk); #1ps reset = 0;
+        repeat (20) @(posedge clk);
+        #1ps;
+
+        if (dmem.mem['h10] != 120) $fatal(1, "Factorial failed");
+
+        $display("PASS: factorial=%0d", dmem.mem['h10]);
+        $finish;
+    end
+
+endmodule

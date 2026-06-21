@@ -1,8 +1,7 @@
 `timescale 1ns/1ps
 
 module tb_cpu;
-
-    localparam logic [3:0] LOAD=1;
+    import cpu_types::*;
 
     logic clk = 0, reset = 1;
     logic [7:0] imem_addr, dmem_addr;
@@ -19,9 +18,10 @@ module tb_cpu;
         $dumpfile("wave.vcd");
         $dumpvars(0, tb_cpu);
 
-        // Load memory location 0x2A into register 3.
-        imem.mem[0]    = {LOAD, 4'h2, 4'hA, 4'h3};
         dmem.mem['h2A] = 16'hBEEF;
+
+        // Load memory location 0x2A into register 3.
+        imem.mem[0]    = {8'h2A,        4'h3, LOAD}; // r3 = mem[0x2A]
 
         @(posedge clk); #1ps reset = 0;
         @(posedge clk); #1ps;

@@ -1,8 +1,7 @@
 `timescale 1ns/1ps
 
 module tb_cpu;
-
-    localparam logic [3:0] LOAD=1, JNZ=3;
+    import cpu_types::*;
 
     logic clk = 0, reset = 1;
     logic [7:0] imem_addr, dmem_addr;
@@ -20,20 +19,18 @@ module tb_cpu;
         $dumpfile("wave.vcd");
         $dumpvars(0, tb_cpu);
 
-        // Put 1 in r1 and address 4 in r2, then jump from PC 2 to PC 4.
-        imem.mem[0] = {LOAD, 4'h1, 4'h0, 4'h1};
-        imem.mem[1] = {LOAD, 4'h1, 4'h1, 4'h2};
-        imem.mem[2] = {JNZ,  4'h1, 4'h2, 4'h0};
-        imem.mem[3] = {LOAD, 4'h1, 4'h2, 4'h3}; // Skipped.
-        imem.mem[4] = {LOAD, 4'h1, 4'h3, 4'h3};
-
         dmem.mem['h10] = 16'd1;
-        dmem.mem['h11] = 16'd4;
         dmem.mem['h12] = 16'hDEAD;
         dmem.mem['h13] = 16'hBEEF;
 
+        // Put 1 in r1, then jump from PC 1 to immediate address 4.
+        imem.mem[0] = {8'h10, 4'h1, LOAD}; // r1 = mem[0x10] = 1
+        imem.mem[1] = {8'h04, 4'h1, JNZ};  // if (r1 != 0) jump to PC 4
+        imem.mem[2] = {8'h12, 4'h3, LOAD}; // r3 = mem[0x12] (skipped)
+        imem.mem[4] = {8'h13, 4'h3, LOAD}; // r3 = mem[0x13]
+
         @(posedge clk); #1ps reset = 0;
-        repeat (4) @(posedge clk);
+        repeat (3) @(posedge clk);
         #1ps;
 
         if (dut.regs[3] != 16'hBEEF) $fatal(1, "JNZ failed");
