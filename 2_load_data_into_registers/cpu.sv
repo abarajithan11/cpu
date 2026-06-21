@@ -10,10 +10,9 @@ module cpu (
   output logic [7:0]  dmem_addr,  // --- new
   input  logic [15:0] dmem_rdata // --- new
 );
-  logic [7:0] pc;
+  logic [7:0] pc, addr;
   typedef enum logic [3:0] {LOAD} op_t; // --- new
   logic [3:0] op, rid; // --- new
-  logic [7:0] addr; // --- new
   logic [15:0] regs [0:15]; // --- new
 
   always_comb begin

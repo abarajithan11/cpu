@@ -12,10 +12,9 @@ module cpu (
   output logic [15:0] dmem_wdata, // --- new
   output logic        dmem_wen    // --- new
 );
-  logic [7:0] pc;
+  logic [7:0] pc, addr;
   typedef enum logic [3:0] {LOAD, STORE} op_t;
   logic [3:0] op, src_1, src_2, dst, rid;
-  logic [7:0] addr;
   logic [15:0] regs [0:15];
 
   always_comb begin
