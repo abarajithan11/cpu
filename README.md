@@ -21,7 +21,7 @@ nix-shell
 | `2_load_data_into_registers` | Sixteen registers and `LOAD` |
 | `3_store_data` | `STORE` |
 | `4_move_alu` | `MOVE`, `ADD`, `SUB`, and `MUL` |
-| `5_jump` | Immediate-address conditional `JNZ` |
+| `5_jump` | `JNZ`: jump to a given address if a given register is not zero |
 
 ## CPU Design
 
