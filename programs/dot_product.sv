@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module dot_product;
-  import cpu_types::*;
+  typedef enum logic [3:0] {LOAD, STORE, MOVE, ADD, SUB, MUL, JNZ} op_t;
 
   logic clk = 0, reset = 1;
   logic [7:0] imem_addr, dmem_addr;

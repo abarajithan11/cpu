@@ -7,13 +7,10 @@ module cpu (
   output logic [7:0]  imem_addr,
   input  logic [15:0] imem_rdata
 );
-  import cpu_types::*;
-  instruction_t inst;
   logic [7:0] pc;
 
   always_comb begin
-    imem_addr  = pc;
-    inst       = instruction_t'(imem_rdata);
+    imem_addr               = pc;
   end
 
   always_ff @(posedge clk) begin

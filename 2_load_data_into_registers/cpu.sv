@@ -10,16 +10,18 @@ module cpu (
   output logic [7:0]  dmem_addr,  // --- new
   input  logic [15:0] dmem_rdata // --- new
 );
-  import cpu_types::*;
-  instruction_t inst;
   logic [7:0] pc;
+  typedef enum logic [3:0] {LOAD} op_t; // --- new
+  logic [3:0] op, src_1, src_2, dst, rid; // --- new
+  logic [7:0] addr; // --- new
   logic [15:0] regs [0:15]; // --- new
 
   always_comb begin
-    imem_addr  = pc;
-    inst       = instruction_t'(imem_rdata);
+    imem_addr               = pc;
+    {src_2, src_1, dst, op} = imem_rdata; // --- new
+    {addr        , rid, op} = imem_rdata; // --- new
 
-    dmem_addr  = inst.a.addr; // --- new
+    dmem_addr = addr; // --- new
   end
 
   always_ff @(posedge clk) begin
@@ -29,8 +31,8 @@ module cpu (
     end else begin
       pc   <= pc + 1'b1;
 
-      case (inst.r.op) // --- new
-        LOAD: regs[inst.a.rid] <= dmem_rdata; // --- new
+      case (op) // --- new
+        LOAD: regs[rid] <= dmem_rdata; // --- new
         default: ;
       endcase
     end

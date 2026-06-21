@@ -26,17 +26,15 @@ nix-shell
 ## CPU Design
 
 * Only 7 opcodes: `LOAD=0`, `STORE=1`, `MOVE=2`, `ADD=3`, `SUB=4`, `MUL=5`, and `JNZ=6`.
-* Two types of opcodes: 
-  * Address type (`a`): `LOAD, STORE, JNZ` take an `addr`ess and register index (`rid`)
-  * Register type (`r`): `MOVE, ADD, SUB, MUL` take indices of three registers. Two source (`src_1, src_2`) and one destination `dst`.
+* Two instruction formats:
+  * Address type: `LOAD, STORE, JNZ` take an `addr`ess and register index (`rid`)
+  * Register type: `MOVE, ADD, SUB, MUL` take indices of three registers. Two source (`src_1, src_2`) and one destination `dst`.
 * `JNZ` jumps to the `addr` when `regs[rid]` is nonzero.
-* Check [`common/cpu_types.sv`](common/cpu_types.sv) for instruction format & opcode values.
-* Every instruction is 16 bits and is represented by a union of two structs:
 
 <table border="1">
   <tr>
     <th>Instructions</th>
-    <th>Struct</th>
+    <th>Format</th>
     <th>4 Bits [15:12]</th>
     <th>4 Bits [11:8]</th>
     <th>4 Bits [7:4]</th>
@@ -44,14 +42,14 @@ nix-shell
   </tr>
   <tr>
     <td><code>LOAD</code>, <code>STORE</code>, <code>JNZ</code></td>
-    <td><code>a</code></td>
+    <td>Address</td>
     <td colspan="2" align="center"><code>addr</code></td>
     <td><code>rid</code></td>
     <td><code>op</code></td>
   </tr>
   <tr>
     <td><code>MOVE</code>, <code>ADD</code>, <code>SUB</code>, <code>MUL</code></td>
-    <td><code>r</code></td>
+    <td>Register</td>
     <td><code>src_2</code></td>
     <td><code>src_1</code></td>
     <td><code>dst</code></td>
