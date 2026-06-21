@@ -1,49 +1,50 @@
 `timescale 1ns/1ps
 
 module cpu (
-    input  logic        clk,
-    input  logic        reset,
+  input  logic        clk,
+  input  logic        reset,
 
-    output logic [7:0]  imem_addr,
-    input  logic [15:0] imem_rdata,
+  output logic [7:0]  imem_addr,
+  input  logic [15:0] imem_rdata,
 
-    output logic [7:0]  dmem_addr,
-    output logic [15:0] dmem_wdata,
-    output logic        dmem_we,
-    input  logic [15:0] dmem_rdata
+  output logic [7:0]  dmem_addr,
+  input  logic [15:0] dmem_rdata,
+  output logic [15:0] dmem_wdata,
+  output logic        dmem_wen
 );
-    import cpu_types::*;
+  import cpu_types::*;
+  instruction_t inst;
+  logic [7:0] pc;
+  logic [15:0] regs [0:15];
+  logic [15:0] reg_1, reg_2; // --- new
 
-    logic [7:0] pc;
-    logic [15:0] regs [0:15];
-    logic [15:0] reg_1, reg_2; // New!
-    instruction_t inst;
+  always_comb begin
+    imem_addr  = pc;
+    inst       = instruction_t'(imem_rdata);
 
-    always_comb begin
-        imem_addr  = pc;
-        inst       = instruction_t'(imem_rdata);
-        reg_1      = regs[inst.rtype.src_1];
-        reg_2      = regs[inst.rtype.src_2]; // New!
-        dmem_addr  = inst.atype.addr;
-        dmem_wdata = regs[inst.atype.reg_idx];
-        dmem_we    = !reset && inst.atype.op == STORE;
+    dmem_addr  = inst.a.addr;
+    dmem_wdata = regs[inst.a.rid];
+    dmem_wen   = !reset && inst.a.op == STORE;
+
+    reg_1      = regs[inst.r.src_1]; // --- new
+    reg_2      = regs[inst.r.src_2]; // --- new
+  end
+
+  always_ff @(posedge clk) begin
+    if (reset) begin
+      pc   <= '0;
+      regs <= '{default: '0};
+    end else begin
+      pc   <= pc + 1'b1;
+      case (inst.r.op)
+        LOAD: regs[inst.a.rid] <= dmem_rdata;
+        MOVE: regs[inst.r.dst] <= reg_1;         // --- new
+        ADD : regs[inst.r.dst] <= reg_1 + reg_2; // --- new
+        SUB : regs[inst.r.dst] <= reg_1 - reg_2; // --- new
+        MUL : regs[inst.r.dst] <= reg_1 * reg_2; // --- new
+        default: ;
+      endcase
     end
-
-    always_ff @(posedge clk) begin
-        if (reset) begin
-            pc <= '0;
-            for (int i = 0; i < 16; i++) regs[i] <= '0;
-        end else begin
-            pc <= pc + 1'b1;
-            case (inst.rtype.op)
-                MOVE: regs[inst.rtype.dst] <= reg_1;
-                LOAD: regs[inst.atype.reg_idx] <= dmem_rdata;
-                ADD:  regs[inst.rtype.dst] <= reg_1 + reg_2; // New!
-                SUB:  regs[inst.rtype.dst] <= reg_1 - reg_2; // New!
-                MUL:  regs[inst.rtype.dst] <= reg_1 * reg_2; // New!
-                default: ;
-            endcase
-        end
-    end
+  end
 
 endmodule

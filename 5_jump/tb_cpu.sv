@@ -1,41 +1,41 @@
 `timescale 1ns/1ps
 
 module tb_cpu;
-    import cpu_types::*;
+  import cpu_types::*;
 
-    logic clk = 0, reset = 1;
-    logic [7:0] imem_addr, dmem_addr;
-    logic [15:0] imem_rdata, dmem_rdata, dmem_wdata;
-    logic dmem_we;
+  logic clk = 0, reset = 1;
+  logic [7:0] imem_addr, dmem_addr;
+  logic [15:0] imem_rdata, dmem_rdata, dmem_wdata;
+  logic dmem_wen;
 
-    cpu dut(.*);
+  cpu dut(.*);
 
-    memory imem(clk, imem_addr, '0,         1'b0,    imem_rdata);
-    memory dmem(clk, dmem_addr, dmem_wdata, dmem_we, dmem_rdata);
+  memory imem(clk, imem_addr, '0,         1'b0,    imem_rdata);
+  memory dmem(clk, dmem_addr, dmem_wdata, dmem_wen, dmem_rdata);
 
-    initial forever #5 clk = ~clk;
+  initial forever #5 clk = ~clk;
 
-    initial begin
-        $dumpfile("wave.vcd");
-        $dumpvars(0, tb_cpu);
+  initial begin
+    $dumpfile("wave.vcd");
+    $dumpvars(0, tb_cpu);
 
-        dmem.mem['h10] = 16'd1;
-        dmem.mem['h12] = 16'hDEAD;
-        dmem.mem['h13] = 16'hBEEF;
+    dmem.mem['h10] = 16'd1;
+    dmem.mem['h12] = 16'hDEAD;
+    dmem.mem['h13] = 16'hBEEF;
 
-        // Put 1 in r1, then jump from PC 1 to immediate address 4.
-        imem.mem[0] = {8'h10, 4'h1, LOAD}; // r1 = mem[0x10] = 1
-        imem.mem[1] = {8'h04, 4'h1, JNZ};  // if (r1 != 0) jump to PC 4
-        imem.mem[2] = {8'h12, 4'h3, LOAD}; // r3 = mem[0x12] (skipped)
-        imem.mem[4] = {8'h13, 4'h3, LOAD}; // r3 = mem[0x13]
+    // Put 1 in r1, then jump from PC 1 to immediate address 4.
+    imem.mem[0] = {8'h10, 4'h1, LOAD}; // r1 = mem[0x10] = 1
+    imem.mem[1] = {8'h04, 4'h1, JNZ};  // if (r1 != 0) jump to PC 4
+    imem.mem[2] = {8'h12, 4'h3, LOAD}; // r3 = mem[0x12] (skipped)
+    imem.mem[4] = {8'h13, 4'h3, LOAD}; // r3 = mem[0x13]
 
-        @(posedge clk); #1ps reset = 0;
-        repeat (3) @(posedge clk);
-        #1ps;
+    @(posedge clk); #1ps reset = 0;
+    repeat (3) @(posedge clk);
+    #1ps;
 
-        if (dut.regs[3] != 16'hBEEF) $fatal(1, "JNZ failed");
-        $display("PASS: r3=%04h", dut.regs[3]);
-        $finish;
-    end
+    if (dut.regs[3] != 16'hBEEF) $fatal(1, "JNZ failed");
+    $display("PASS: r3=%04h", dut.regs[3]);
+    $finish;
+  end
 
 endmodule

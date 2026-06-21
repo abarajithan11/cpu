@@ -11,7 +11,10 @@ sim:
 	@mkdir -p $(BUILD_DIR)
 	$(VERILATOR) --binary --timing --trace -Wall -Wno-fatal -Wno-UNUSEDSIGNAL --top-module $(TOP) \
 		--Mdir $(BUILD_DIR) ../common/cpu_types.sv ../common/memory.sv $(CPU) $(TB)
-	./$(BUILD_DIR)/V$(TOP)
+	@printf '\n\n\n%s\n' "./$(BUILD_DIR)/V$(TOP)"; \
+	./$(BUILD_DIR)/V$(TOP); status=$$?; \
+	printf '\n\n\n'; \
+	exit $$status
 
 gtkwave: wave.vcd
 	$(GTKWAVE) wave.vcd

@@ -22,10 +22,10 @@ nix-shell
 
 | Instructions | Structure | Bits 15:12 | Bits 11:8 | Bits 7:4 | Bits 3:0 |
 | --- | --- | --- | --- | --- | --- |
-| `LOAD`, `STORE`, `JNZ` | `atype` | `addr[7:4]` | `addr[3:0]` | `reg_idx` | `op` |
-| `MOVE`, `ADD`, `SUB`, `MUL` | `rtype` | `src_2` | `src_1` | `dst` | `op` |
+| `LOAD`, `STORE`, `JNZ` | `a` | `addr[7:4]` | `addr[3:0]` | `rid` | `op` |
+| `MOVE`, `ADD`, `SUB`, `MUL` | `r` | `src_2` | `src_1` | `dst` | `op` |
 
-`JNZ` jumps to the `addr` when `regs[reg_idx]` is nonzero.
+`JNZ` jumps to the `addr` when `regs[rid]` is nonzero.
 
 * The opcode values are `LOAD=0`, `STORE=1`, `MOVE=2`, `ADD=3`, `SUB=4`, `MUL=5`, and `JNZ=6`.
 
