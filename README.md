@@ -17,7 +17,7 @@ nix-shell
 
 | Level | Feature |
 | --- | --- |
-| `1_load_instruction` | Program counter and instruction fetch |
+| `1_load_instruction` | Just a counter to load instructions (PC) |
 | `2_load_data_into_registers` | Sixteen registers and `LOAD` |
 | `3_store_data` | `STORE` |
 | `4_move_alu` | `MOVE`, `ADD`, `SUB`, and `MUL` |
