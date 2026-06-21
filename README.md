@@ -42,3 +42,5 @@ Run a complete program from the project root with:
 make sim PROGRAM=factorial
 make gtkwave
 ```
+
+Available programs are `factorial`, `fibonacci`, `sum_to_n`, and `dot_product`.

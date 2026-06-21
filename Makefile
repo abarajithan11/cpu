@@ -21,6 +21,10 @@ sim_all:
 	done; \
 	for program in $(PROGRAMS); do \
 		echo "==> Simulating program $$program"; \
+		rm -f programs/wave.vcd; \
 		$(MAKE) -C programs sim PROGRAM="$$program" || status=1; \
+		if test -f programs/wave.vcd; then \
+			mv programs/wave.vcd "programs/$$program.vcd"; \
+		fi; \
 	done; \
 	exit $$status
