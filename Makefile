@@ -32,7 +32,7 @@ ifneq ($(PROGRAM),)
 	@test -f "programs/$(PROGRAM).sv" || { echo "Unknown program: $(PROGRAM)"; exit 2; }
 endif
 	@mkdir -p "$(SIM_BUILD_DIR)"
-	$(VERILATOR) --binary --timing --trace-fst -Wall -Wno-fatal --top-module "$(TOP)" \
+	$(VERILATOR) --binary --timing --trace-fst --trace-max-array 256 -Wall -Wno-fatal --top-module "$(TOP)" \
 		--Mdir "$(SIM_BUILD_DIR)" common/memory.sv "$(CPU)" "$(TB)"
 	@printf '\n\n\n%s\n' "./$(SIM_BUILD_DIR)/V$(TOP)"; \
 	cd "$(SIM_DIR)" && ../$(SIM_BUILD_DIR)/V$(TOP); status=$$?; \
