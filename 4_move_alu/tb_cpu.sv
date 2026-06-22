@@ -19,12 +19,12 @@ module tb_cpu;
     $dumpfile("wave.fst");
     $dumpvars(0, tb_cpu);
 
-    dmem.mem['h10] = 16'd7;
-    dmem.mem['h11] = 16'd3;
+    dmem.mem[0] = 16'd7;
+    dmem.mem[1] = 16'd3;
 
     // Load 7 and 3, copy r1, then calculate sum, difference, and product.
-    imem.mem[0] = {8'h10,        4'h1, LOAD}; // r1 = mem[0x10] = 7
-    imem.mem[1] = {8'h11,        4'h2, LOAD}; // r2 = mem[0x11] = 3
+    imem.mem[0] = {8'h00,        4'h1, LOAD}; // r1 = mem[0] = 7
+    imem.mem[1] = {8'h01,        4'h2, LOAD}; // r2 = mem[1] = 3
     imem.mem[2] = {4'h0,  4'h1,  4'h6, MOVE}; // r6 = r1
     imem.mem[3] = {4'h2,  4'h1,  4'h3, ADD};  // r3 = r1 + r2
     imem.mem[4] = {4'h2,  4'h1,  4'h4, SUB};  // r4 = r1 - r2

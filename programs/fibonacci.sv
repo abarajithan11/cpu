@@ -36,14 +36,14 @@ module tb_cpu;
     imem.mem[7] = {4'h2,  4'h1,  4'h1, SUB};   // r1 (counter) -= r2 (one)
     imem.mem[8] = {8'h04,        4'h1, JNZ};   // repeat while r1 (counter) != 0
 
-    imem.mem[9] = {8'h10,        4'h3, STORE}; // mem[0x10] = r3 = F(10)
+    imem.mem[9] = {8'h03,        4'h3, STORE}; // mem[3] = r3 = F(10)
 
     @(posedge clk); #1ps reset = 0;
     repeat (56) @(posedge clk);
     #1ps;
 
-    assert (dmem.mem['h10] == 55) 
-      $display("PASS: fibonacci(10)=%0d", dmem.mem['h10]);
+    assert (dmem.mem[3] == 55)
+      $display("PASS: fibonacci(10)=%0d", dmem.mem[3]);
       else $fatal(1, "Fibonacci failed");
     $finish;
   end

@@ -19,15 +19,15 @@ module tb_cpu;
     $dumpfile("wave.fst");
     $dumpvars(0, tb_cpu);
 
-    dmem.mem['h10] = 16'd1;
-    dmem.mem['h12] = 16'hDEAD;
-    dmem.mem['h13] = 16'hBEEF;
+    dmem.mem[0] = 16'd1;
+    dmem.mem[1] = 16'hDEAD;
+    dmem.mem[2] = 16'hBEEF;
 
     // Put 1 in r1, then jump from PC 1 to immediate address 4.
-    imem.mem[0] = {8'h10, 4'h1, LOAD}; // r1 = mem[0x10] = 1
+    imem.mem[0] = {8'h00, 4'h1, LOAD}; // r1 = mem[0] = 1
     imem.mem[1] = {8'h04, 4'h1, JNZ};  // if (r1 != 0) jump to PC 4
-    imem.mem[2] = {8'h12, 4'h3, LOAD}; // r3 = mem[0x12] (skipped)
-    imem.mem[4] = {8'h13, 4'h3, LOAD}; // r3 = mem[0x13]
+    imem.mem[2] = {8'h01, 4'h3, LOAD}; // r3 = mem[1] (skipped)
+    imem.mem[4] = {8'h02, 4'h3, LOAD}; // r3 = mem[2]
 
     @(posedge clk); #1ps reset = 0;
     repeat (3) @(posedge clk);

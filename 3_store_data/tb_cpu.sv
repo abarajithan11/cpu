@@ -19,18 +19,18 @@ module tb_cpu;
     $dumpfile("wave.fst");
     $dumpvars(0, tb_cpu);
 
-    dmem.mem['h2A] = 16'hBEEF;
+    dmem.mem[0] = 16'hBEEF;
 
-    // Load 0xBEEF into r3, then store r3 at address 0x40.
-    imem.mem[0]    = {8'h2A,        4'h3, LOAD};  // r3 = mem[0x2A]
-    imem.mem[1]    = {8'h40,        4'h3, STORE}; // mem[0x40] = r3
+    // Load 0xBEEF into r3, then store r3 at address 1.
+    imem.mem[0] = {8'h00, 4'h3, LOAD};  // r3 = mem[0]
+    imem.mem[1] = {8'h01, 4'h3, STORE}; // mem[1] = r3
 
     @(posedge clk); #1ps reset = 0;
     repeat (2) @(posedge clk);
     #1ps;
 
-    assert (dmem.mem['h40] == 16'hBEEF)
-      $display("PASS: mem[40]=%04h", dmem.mem['h40]);
+    assert (dmem.mem[1] == 16'hBEEF)
+      $display("PASS: mem[1]=%04h", dmem.mem[1]);
       else $fatal(1, "STORE failed");
     $finish;
   end

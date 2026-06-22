@@ -33,14 +33,14 @@ module tb_cpu;
     imem.mem[4] = {4'h2,  4'h1,  4'h1, SUB};   // r1 (counter) -= r2 (one)
     imem.mem[5] = {8'h03,        4'h1, JNZ};   // repeat while r1 (counter) != 0
 
-    imem.mem[6] = {8'h10,        4'h3, STORE}; // mem[0x10] = r3 (sum)
+    imem.mem[6] = {8'h03,        4'h3, STORE}; // mem[3] = r3 (sum)
 
     @(posedge clk); #1ps reset = 0;
     repeat (35) @(posedge clk);
     #1ps;
 
-    assert (dmem.mem['h10] == 55) 
-      $display("PASS: sum(1..10)=%0d", dmem.mem['h10]);
+    assert (dmem.mem[3] == 55)
+      $display("PASS: sum(1..10)=%0d", dmem.mem[3]);
       else $fatal(1, "Sum to N failed");
     $finish;
   end

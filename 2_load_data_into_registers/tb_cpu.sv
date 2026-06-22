@@ -18,10 +18,10 @@ module tb_cpu;
     $dumpfile("wave.fst");
     $dumpvars(0, tb_cpu);
 
-    dmem.mem['h2A] = 16'hBEEF;
+    dmem.mem[0] = 16'hBEEF;
 
-    // Load memory location 0x2A into register 3.
-    imem.mem[0]    = {8'h2A,        4'h3, LOAD}; // r3 = mem[0x2A]
+    // Load memory location 0 into register 3.
+    imem.mem[0] = {8'h00, 4'h3, LOAD}; // r3 = mem[0]
 
     @(posedge clk); #1ps reset = 0;
     @(posedge clk); #1ps;
