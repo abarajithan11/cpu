@@ -16,7 +16,7 @@ module factorial;
   initial forever #5 clk = ~clk;
 
   initial begin
-    $dumpfile("wave.vcd");
+    $dumpfile("wave.fst");
     $dumpvars(0, factorial);
 
     dmem.mem[0] = 16'd5;

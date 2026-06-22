@@ -16,7 +16,7 @@ module cpu (
   logic [15:0] regs [16]; // --- new
 
   always_comb begin
-    imem_addr       = pc;
+    imem_addr         = pc;
     {addr, i_reg, op} = imem_rdata; // --- new
 
     dmem_addr = addr; // --- new

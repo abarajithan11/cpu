@@ -7,5 +7,6 @@ pkgs.mkShell {
     gtkwave
     python3
     verilator
+    zlib
   ];
 }

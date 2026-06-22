@@ -12,7 +12,7 @@ SIM_BUILD_DIR := $(BUILD_DIR)/$(STEP_DIR)
 TOP := tb_cpu
 CPU := $(STEP_DIR)/cpu.sv
 TB := $(STEP_DIR)/tb_cpu.sv
-WAVE := $(STEP_DIR)/wave.vcd
+WAVE := $(STEP_DIR)/wave.fst
 SIM_ARGS := STEP=$(STEP)
 else
 SIM_DIR := programs
@@ -20,7 +20,7 @@ SIM_BUILD_DIR := $(BUILD_DIR)/$(PROGRAM)
 TOP := $(PROGRAM)
 CPU := 5_jump/cpu.sv
 TB := programs/$(PROGRAM).sv
-WAVE := programs/$(PROGRAM).vcd
+WAVE := programs/$(PROGRAM).fst
 SIM_ARGS := PROGRAM=$(PROGRAM)
 endif
 
@@ -32,14 +32,14 @@ ifneq ($(PROGRAM),)
 	@test -f "programs/$(PROGRAM).sv" || { echo "Unknown program: $(PROGRAM)"; exit 2; }
 endif
 	@mkdir -p "$(SIM_BUILD_DIR)"
-	$(VERILATOR) --binary --timing --trace -Wall -Wno-fatal --top-module "$(TOP)" \
+	$(VERILATOR) --binary --timing --trace-fst -Wall -Wno-fatal --top-module "$(TOP)" \
 		--Mdir "$(SIM_BUILD_DIR)" common/memory.sv "$(CPU)" "$(TB)"
 	@printf '\n\n\n%s\n' "./$(SIM_BUILD_DIR)/V$(TOP)"; \
 	cd "$(SIM_DIR)" && ../$(SIM_BUILD_DIR)/V$(TOP); status=$$?; \
 	printf '\n\n\n'; \
 	exit $$status
 ifneq ($(PROGRAM),)
-	@if test -f programs/wave.vcd; then mv programs/wave.vcd "$(WAVE)"; fi
+	@if test -f programs/wave.fst; then mv programs/wave.fst "$(WAVE)"; fi
 endif
 
 sim_all:
@@ -59,4 +59,4 @@ gtkwave:
 	$(GTKWAVE) "$(WAVE)"
 
 clean:
-	rm -rf $(BUILD_DIR) [0-9]_*/wave.vcd programs/wave.vcd
+	rm -rf $(BUILD_DIR) [0-9]_*/wave.fst programs/*.fst

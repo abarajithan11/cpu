@@ -16,7 +16,7 @@ module dot_product;
   initial forever #5 clk = ~clk;
 
   initial begin
-    $dumpfile("wave.vcd");
+    $dumpfile("wave.fst");
     $dumpvars(0, dot_product);
 
     dmem.mem[0] = 16'd1;

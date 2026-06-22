@@ -16,7 +16,7 @@ module sum_to_n;
   initial forever #5 clk = ~clk;
 
   initial begin
-    $dumpfile("wave.vcd");
+    $dumpfile("wave.fst");
     $dumpvars(0, sum_to_n);
 
     dmem.mem[0] = 16'd10;

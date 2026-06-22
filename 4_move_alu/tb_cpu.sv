@@ -16,7 +16,7 @@ module tb_cpu;
   initial forever #5 clk = ~clk;
 
   initial begin
-    $dumpfile("wave.vcd");
+    $dumpfile("wave.fst");
     $dumpvars(0, tb_cpu);
 
     dmem.mem['h10] = 16'd7;
