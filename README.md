@@ -38,9 +38,9 @@ Available programs:
 
 * Only 7 opcodes: `LOAD=0`, `STORE=1`, `MOVE=2`, `ADD=3`, `SUB=4`, `MUL=5`, and `JNZ=6`.
 * Two instruction formats:
-  * Address type: `LOAD, STORE, JNZ` take an `addr`ess and register index (`rid`)
-  * Register type: `MOVE, ADD, SUB, MUL` take indices of three registers. Two source (`src_1, src_2`) and one destination `dst`.
-* `JNZ` jumps to the `addr` when `regs[rid]` is nonzero.
+  * Address type: `LOAD, STORE, JNZ` take an `addr`ess and register index (`i_reg`)
+  * Register type: `MOVE, ADD, SUB, MUL` take indices of three registers. Two source (`i_rs1, i_rs2`) and one destination `i_rd`.
+* `JNZ` jumps to the `addr` when `regs[i_reg]` is nonzero.
 
 <table border="1">
   <tr>
@@ -55,15 +55,15 @@ Available programs:
     <td><code>LOAD</code>, <code>STORE</code>, <code>JNZ</code></td>
     <td>Address</td>
     <td colspan="2" align="center"><code>addr</code></td>
-    <td><code>rid</code></td>
+    <td><code>i_reg</code></td>
     <td><code>op</code></td>
   </tr>
   <tr>
     <td><code>MOVE</code>, <code>ADD</code>, <code>SUB</code>, <code>MUL</code></td>
     <td>Register</td>
-    <td><code>src_2</code></td>
-    <td><code>src_1</code></td>
-    <td><code>dst</code></td>
+    <td><code>i_rs2</code></td>
+    <td><code>i_rs1</code></td>
+    <td><code>i_rd</code></td>
     <td><code>op</code></td>
   </tr>
 </table>

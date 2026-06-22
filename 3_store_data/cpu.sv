@@ -14,15 +14,15 @@ module cpu (
 );
   logic [7:0] pc, addr;
   typedef enum logic [3:0] {LOAD, STORE} op_t;
-  logic [3:0] op, rid;
+  logic [3:0] op, i_reg;
   logic [15:0] regs [0:15];
 
   always_comb begin
-    imem_addr               = pc;
-    {addr        , rid, op} = imem_rdata;
+    imem_addr                 = pc;
+    {addr        , i_reg, op} = imem_rdata;
 
     dmem_addr  = addr;
-    dmem_wdata = regs[rid]; // --- new
+    dmem_wdata = regs[i_reg]; // --- new
     dmem_wen   = !reset && op == STORE; // --- new
   end
 
@@ -34,7 +34,7 @@ module cpu (
       pc   <= pc + 1'b1;
 
       case (op)
-        LOAD: regs[rid] <= dmem_rdata;
+        LOAD: regs[i_reg] <= dmem_rdata;
         default: ;
       endcase
     end
