@@ -1,7 +1,7 @@
 # Building a Simple 16-Bit CPU Incrementally in <50 lines of SystemVerilog
 
-This project builds a small 16-bit CPU in five incremental stages. 
-Each stage has its own CPU, self-checking testbench, and Makefile.
+This project builds a small 16-bit CPU in five incremental steps. 
+Each step has its own CPU and self-checking testbench.
 Programs are written directly in SV testbench.
 [Full CPU is here](5_jump/cpu.sv)
 
@@ -59,19 +59,22 @@ nix-shell
 
 ## How to run
 
-Run any stage with:
+Run any step from the project root with:
 
 ```sh
-cd 5_jump
-make sim
+make sim STEP=5
 ```
+
+Step 5 is the default, so `make sim` runs it without additional arguments.
 
 Run a complete program from the project root with:
 
 ```sh
 make sim PROGRAM=factorial
-make gtkwave
+make gtkwave PROGRAM=factorial
 ```
+
+View a step waveform with `make gtkwave STEP=5`.
 
 Available programs:
 * `sum_to_n`

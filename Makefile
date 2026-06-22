@@ -1,30 +1,62 @@
-STAGES := \
-	1_load_instruction \
-	2_load_data_into_registers \
-	3_store_data \
-	4_move_alu \
-	5_jump
+VERILATOR ?= verilator
+GTKWAVE ?= gtkwave
+BUILD_DIR ?= obj_dir
+STEP ?= 5
 
 PROGRAMS := $(basename $(notdir $(wildcard programs/*.sv)))
+STEP_DIR := $(wildcard $(STEP)_*)
 
-.PHONY: sim sim_all
+ifeq ($(PROGRAM),)
+SIM_DIR := $(STEP_DIR)
+SIM_BUILD_DIR := $(BUILD_DIR)/$(STEP_DIR)
+TOP := tb_cpu
+CPU := $(STEP_DIR)/cpu.sv
+TB := $(STEP_DIR)/tb_cpu.sv
+WAVE := $(STEP_DIR)/wave.vcd
+SIM_ARGS := STEP=$(STEP)
+else
+SIM_DIR := programs
+SIM_BUILD_DIR := $(BUILD_DIR)/$(PROGRAM)
+TOP := $(PROGRAM)
+CPU := 5_jump/cpu.sv
+TB := programs/$(PROGRAM).sv
+WAVE := programs/$(PROGRAM).vcd
+SIM_ARGS := PROGRAM=$(PROGRAM)
+endif
+
+.PHONY: sim sim_all gtkwave clean
 
 sim:
-	@test -n "$(PROGRAM)" || { echo "PROGRAM is required (for example: make sim PROGRAM=factorial)"; exit 2; }
-	$(MAKE) -C programs sim PROGRAM="$(PROGRAM)"
+ifneq ($(PROGRAM),)
+	@test -n "$(PROGRAM)" || { echo "PROGRAM is required"; exit 2; }
+	@test -f "programs/$(PROGRAM).sv" || { echo "Unknown program: $(PROGRAM)"; exit 2; }
+endif
+	@mkdir -p "$(SIM_BUILD_DIR)"
+	$(VERILATOR) --binary --timing --trace -Wall -Wno-fatal -Wno-UNUSEDSIGNAL --top-module "$(TOP)" \
+		--Mdir "$(SIM_BUILD_DIR)" common/memory.sv "$(CPU)" "$(TB)"
+	@printf '\n\n\n%s\n' "./$(SIM_BUILD_DIR)/V$(TOP)"; \
+	cd "$(SIM_DIR)" && ../$(SIM_BUILD_DIR)/V$(TOP); status=$$?; \
+	printf '\n\n\n'; \
+	exit $$status
+ifneq ($(PROGRAM),)
+	@if test -f programs/wave.vcd; then mv programs/wave.vcd "$(WAVE)"; fi
+endif
 
 sim_all:
 	@status=0; \
-	for stage in $(STAGES); do \
+	for stage in [0-9]_*; do \
 		echo "==> Simulating $$stage"; \
-		$(MAKE) -C "$$stage" sim || status=1; \
+		$(MAKE) sim STEP="$${stage%%_*}" || status=1; \
 	done; \
 	for program in $(PROGRAMS); do \
 		echo "==> Simulating program $$program"; \
-		rm -f programs/wave.vcd; \
-		$(MAKE) -C programs sim PROGRAM="$$program" || status=1; \
-		if test -f programs/wave.vcd; then \
-			mv programs/wave.vcd "programs/$$program.vcd"; \
-		fi; \
+		$(MAKE) sim PROGRAM="$$program" || status=1; \
 	done; \
 	exit $$status
+
+gtkwave:
+	@test -f "$(WAVE)" || $(MAKE) sim $(SIM_ARGS)
+	$(GTKWAVE) "$(WAVE)"
+
+clean:
+	rm -rf $(BUILD_DIR) [0-9]_*/wave.vcd programs/wave.vcd
