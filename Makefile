@@ -56,7 +56,7 @@ sim_all:
 
 gtkwave:
 	@test -f "$(WAVE)" || $(MAKE) sim $(SIM_ARGS)
-	$(GTKWAVE) "$(WAVE)"
+	$(GTKWAVE) "$(WAVE)" common/wave.gtkw
 
 clean:
 	rm -rf $(BUILD_DIR) [0-9]_*/wave.fst programs/*.fst

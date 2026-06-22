@@ -1,0 +1,94 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Mon Jun 22 19:46:36 2026
+[*]
+[timestart] 0
+[size] 3828 2067
+[pos] 36607 32767
+*0.000000 2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] fibonacci.
+[sst_width] 341
+[signals_width] 221
+[sst_expanded] 1
+[sst_vpaned_height] 667
+@100000028
+fibonacci.clk
+@28
+fibonacci.reset
+@800200
+-instruction mem
+@22
+fibonacci.imem.mem[0][15:0]
+fibonacci.imem.mem[1][15:0]
+fibonacci.imem.mem[2][15:0]
+fibonacci.imem.mem[3][15:0]
+fibonacci.imem.mem[4][15:0]
+fibonacci.imem.mem[5][15:0]
+fibonacci.imem.mem[6][15:0]
+fibonacci.imem.mem[7][15:0]
+fibonacci.imem.mem[8][15:0]
+fibonacci.imem.mem[9][15:0]
+fibonacci.imem.mem[10][15:0]
+@1000200
+-instruction mem
+@800200
+-data mem
+@22
+fibonacci.dmem.mem[0][15:0]
+fibonacci.dmem.mem[1][15:0]
+fibonacci.dmem.mem[2][15:0]
+fibonacci.dmem.mem[3][15:0]
+fibonacci.dmem.mem[4][15:0]
+fibonacci.dmem.mem[5][15:0]
+fibonacci.dmem.mem[6][15:0]
+fibonacci.dmem.mem[7][15:0]
+fibonacci.dmem.mem[8][15:0]
+fibonacci.dmem.mem[9][15:0]
+@1000200
+-data mem
+@800200
+-cpu
+@22
+fibonacci.dut.imem_addr[7:0]
+fibonacci.dut.imem_rdata[15:0]
+@100000028
+fibonacci.dut.op[3:0]
+@800200
+-address type
+@22
+fibonacci.dut.addr[7:0]
+fibonacci.dut.i_reg[3:0]
+@1000200
+-address type
+@800200
+-register type
+@22
+fibonacci.dut.i_rs1[3:0]
+fibonacci.dut.i_rs2[3:0]
+fibonacci.dut.i_rd[3:0]
+@1000200
+-register type
+@22
+fibonacci.dut.dmem_addr[7:0]
+fibonacci.dut.dmem_rdata[15:0]
+fibonacci.dut.dmem_wdata[15:0]
+@28
+fibonacci.dut.dmem_wen
+@22
+fibonacci.dut.reg_1[15:0]
+fibonacci.dut.reg_2[15:0]
+fibonacci.dut.pc[7:0]
+fibonacci.dut.regs[0][15:0]
+fibonacci.dut.regs[1][15:0]
+fibonacci.dut.regs[2][15:0]
+fibonacci.dut.regs[3][15:0]
+fibonacci.dut.regs[4][15:0]
+fibonacci.dut.regs[5][15:0]
+fibonacci.dut.regs[6][15:0]
+fibonacci.dut.regs[7][15:0]
+fibonacci.dut.regs[8][15:0]
+fibonacci.dut.regs[9][15:0]
+@1000200
+-cpu
+[pattern_trace] 1
+[pattern_trace] 0
