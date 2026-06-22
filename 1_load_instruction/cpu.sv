@@ -4,8 +4,8 @@ module cpu (
   input  logic        clk,
   input  logic        reset,
 
-  output logic [7:0]  imem_addr,
-  input  logic [15:0] imem_rdata
+  output logic [7:0]  imem_addr, // program counter
+  input  logic [15:0] imem_rdata // this is our instruction!
 );
   logic [7:0] pc;
 

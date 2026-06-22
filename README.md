@@ -5,13 +5,24 @@ Each step has its own CPU and self-checking testbench.
 Programs are written directly in SV testbench.
 [Full CPU is here](5_jump/cpu.sv)
 
-## Setup
-
-Enter the development environment with:
+## Setup & run
 
 ```bash
-nix-shell
+nix-shell                       # enter the environment with verilator & gtkwave
+
+make sim     STEP=3             # simulate the default TB of step 3
+make gtkwave STEP=3             # view waveform
+
+make sim     PROGRAM=factorial  # simulate factorial program with step 5
+make gtkwave PROGRAM=factorial  # view waveform
 ```
+
+Available programs:
+* `sum_to_n`
+* `dot_product`
+* `factorial`
+* `fibonacci`
+
 
 ## Incremental evolution
 
@@ -57,27 +68,11 @@ nix-shell
   </tr>
 </table>
 
-## How to run
+### Reading Instructions
 
-Run any step from the project root with:
+Each instruction field is 4-bits, so it becomes a character when displayed as hex, making it easy to read binary. Read right to left (little endian). e.g.
 
-```sh
-make sim STEP=5
 ```
-
-Step 5 is the default, so `make sim` runs it without additional arguments.
-
-Run a complete program from the project root with:
-
-```sh
-make sim PROGRAM=factorial
-make gtkwave PROGRAM=factorial
+0x 1250 - 0=LOAD: regs[5] <- dmem[0x12]
+0x 0123 - 3=ADD : regs[2] <- regs[1] + regs[0]
 ```
-
-View a step waveform with `make gtkwave STEP=5`.
-
-Available programs:
-* `sum_to_n`
-* `dot_product`
-* `factorial`
-* `fibonacci`
