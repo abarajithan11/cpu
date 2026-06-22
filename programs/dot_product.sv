@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module dot_product;
+module tb_cpu;
   typedef enum logic [3:0] {LOAD, STORE, MOVE, ADD, SUB, MUL, JNZ} op_t;
 
   logic clk = 0, reset = 1;
@@ -17,7 +17,7 @@ module dot_product;
 
   initial begin
     $dumpfile("wave.fst");
-    $dumpvars(0, dot_product);
+    $dumpvars(0, tb_cpu);
 
     dmem.mem[0] = 16'd1;
     dmem.mem[1] = 16'd2;
