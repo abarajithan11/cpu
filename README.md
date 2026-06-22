@@ -76,3 +76,7 @@ Each instruction field is 4-bits, so it becomes a character when displayed as he
 0x 1250 - 0=LOAD: regs[5] <- dmem[0x12]
 0x 0123 - 3=ADD : regs[2] <- regs[1] + regs[0]
 ```
+
+Waveform of Fibonacci program:
+![Fibonacci Code](docs/fibonacci.png)
+
