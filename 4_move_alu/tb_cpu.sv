@@ -34,13 +34,11 @@ module tb_cpu;
     repeat (6) @(posedge clk);
     #1ps;
 
-    if (dut.regs[6] != 7)  $fatal(1, "MOVE failed");
-    if (dut.regs[3] != 10) $fatal(1, "ADD failed");
-    if (dut.regs[4] != 4)  $fatal(1, "SUB failed");
-    if (dut.regs[5] != 21) $fatal(1, "MUL failed");
-
-    $display("PASS: add=%0d sub=%0d mul=%0d",
-         dut.regs[3], dut.regs[4], dut.regs[5]);
+    assert (dut.regs[6] == 7)  else $fatal(1, "MOVE failed");
+    assert (dut.regs[3] == 10) else $fatal(1, "ADD failed");
+    assert (dut.regs[4] == 4)  else $fatal(1, "SUB failed");
+    assert (dut.regs[5] == 21) else $fatal(1, "MUL failed");
+    $display("PASS: add=%0d sub=%0d mul=%0d", dut.regs[3], dut.regs[4], dut.regs[5]);
     $finish;
   end
 

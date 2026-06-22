@@ -25,8 +25,9 @@ module tb_cpu;
     repeat (3) @(posedge clk);
     #1ps;
 
-    if (imem_addr != 8'd3) $fatal(1, "Instruction fetch failed");
-    $display("PASS: fetched three instructions");
+    assert (imem_addr == 8'd3)
+      $display("PASS: fetched three instructions");
+      else $fatal(1, "Instruction fetch failed");
     $finish;
   end
 

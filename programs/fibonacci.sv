@@ -42,9 +42,9 @@ module fibonacci;
     repeat (56) @(posedge clk);
     #1ps;
 
-    if (dmem.mem['h10] != 55) $fatal(1, "Fibonacci failed");
-
-    $display("PASS: fibonacci(10)=%0d", dmem.mem['h10]);
+    assert (dmem.mem['h10] == 55) 
+      $display("PASS: fibonacci(10)=%0d", dmem.mem['h10]);
+      else $fatal(1, "Fibonacci failed");
     $finish;
   end
 

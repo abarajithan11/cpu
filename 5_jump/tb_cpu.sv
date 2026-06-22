@@ -33,8 +33,9 @@ module tb_cpu;
     repeat (3) @(posedge clk);
     #1ps;
 
-    if (dut.regs[3] != 16'hBEEF) $fatal(1, "JNZ failed");
-    $display("PASS: r3=%04h", dut.regs[3]);
+    assert (dut.regs[3] == 16'hBEEF)
+      $display("PASS: r3=%04h", dut.regs[3]);
+      else $fatal(1, "JNZ failed");
     $finish;
   end
 

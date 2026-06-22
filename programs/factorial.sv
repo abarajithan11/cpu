@@ -39,9 +39,9 @@ module factorial;
     repeat (20) @(posedge clk);
     #1ps;
 
-    if (dmem.mem['h10] != 120) $fatal(1, "Factorial failed");
-
-    $display("PASS: factorial=%0d", dmem.mem['h10]);
+    assert (dmem.mem['h10] == 120) 
+      $display("PASS: factorial=%0d", dmem.mem['h10]);
+      else $fatal(1, "Factorial failed");
     $finish;
   end
 

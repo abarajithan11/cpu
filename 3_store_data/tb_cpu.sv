@@ -29,8 +29,9 @@ module tb_cpu;
     repeat (2) @(posedge clk);
     #1ps;
 
-    if (dmem.mem['h40] != 16'hBEEF) $fatal(1, "STORE failed");
-    $display("PASS: mem[40]=%04h", dmem.mem['h40]);
+    assert (dmem.mem['h40] == 16'hBEEF)
+      $display("PASS: mem[40]=%04h", dmem.mem['h40]);
+      else $fatal(1, "STORE failed");
     $finish;
   end
 

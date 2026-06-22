@@ -13,9 +13,9 @@ module cpu (
   output logic        dmem_wen
 );
   logic [7:0] pc, addr;
-  typedef enum logic [3:0] {LOAD, STORE, MOVE, ADD, SUB, MUL} op_t;
-  logic [3:0] op, i_rs1, i_rs2, i_rd, i_reg;
-  logic [15:0] regs [0:15];
+  enum logic [3:0] {LOAD, STORE, MOVE, ADD, SUB, MUL} op;
+  logic [ 3:0] i_rs1, i_rs2, i_rd, i_reg;
+  logic [15:0] regs [16];
   logic [15:0] reg_1, reg_2; // --- new
 
   always_comb begin

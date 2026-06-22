@@ -54,9 +54,9 @@ module dot_product;
     repeat (15) @(posedge clk);
     #1ps;
 
-    if (dmem.mem['h10] != 32) $fatal(1, "Dot product failed");
-
-    $display("PASS: dot_product=%0d", dmem.mem['h10]);
+    assert (dmem.mem['h10] == 32) 
+      $display("PASS: dot_product=%0d", dmem.mem['h10]);
+      else $fatal(1, "Dot product failed");
     $finish;
   end
 

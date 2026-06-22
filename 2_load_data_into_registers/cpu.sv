@@ -11,9 +11,9 @@ module cpu (
   input  logic [15:0] dmem_rdata // --- new
 );
   logic [7:0] pc, addr;
-  typedef enum logic [3:0] {LOAD} op_t; // --- new
-  logic [3:0] op, i_reg; // --- new
-  logic [15:0] regs [0:15]; // --- new
+  enum logic [3:0] {LOAD} op; // --- new
+  logic [ 3:0] i_reg; // --- new
+  logic [15:0] regs [16]; // --- new
 
   always_comb begin
     imem_addr       = pc;

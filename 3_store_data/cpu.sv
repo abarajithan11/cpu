@@ -13,9 +13,9 @@ module cpu (
   output logic        dmem_wen    // --- new
 );
   logic [7:0] pc, addr;
-  typedef enum logic [3:0] {LOAD, STORE} op_t;
-  logic [3:0] op, i_reg;
-  logic [15:0] regs [0:15];
+  enum logic [3:0] {LOAD, STORE} op;
+  logic  [3:0] i_reg;
+  logic [15:0] regs [16];
 
   always_comb begin
     imem_addr                 = pc;

@@ -7,7 +7,7 @@ module memory (
   input  logic        wen,
   output logic [15:0] rdata
 );
-  logic [15:0] mem [0:255];
+  logic [15:0] mem [256];
 
   always_ff @(posedge clk)
     if (wen) mem[addr] <= wdata;

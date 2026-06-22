@@ -39,9 +39,9 @@ module sum_to_n;
     repeat (35) @(posedge clk);
     #1ps;
 
-    if (dmem.mem['h10] != 55) $fatal(1, "Sum to N failed");
-
-    $display("PASS: sum(1..10)=%0d", dmem.mem['h10]);
+    assert (dmem.mem['h10] == 55) 
+      $display("PASS: sum(1..10)=%0d", dmem.mem['h10]);
+      else $fatal(1, "Sum to N failed");
     $finish;
   end
 
