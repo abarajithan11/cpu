@@ -22,10 +22,10 @@ jobs:
       - name: Run all simulations
         run: make sim_all
 
-      - name: Upload VCD waveforms
+      - name: Upload FST waveforms
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vcd-waveforms
-          path: "**/*.vcd"
+          name: fst-waveforms
+          path: "**/*.fst"
           if-no-files-found: error
