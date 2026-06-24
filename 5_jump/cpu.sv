@@ -26,7 +26,7 @@ module cpu (
     reg_2      = regs[i_rs2];
   end
 
-  always_ff @(posedge clk) begin
+  always_ff @(posedge clk)
     if (reset) begin
       pc   <= '0;
       regs <= '{default: '0};
@@ -43,6 +43,5 @@ module cpu (
         default: ;
       endcase
     end
-  end
 
 endmodule
